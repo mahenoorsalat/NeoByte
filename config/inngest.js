@@ -1,7 +1,7 @@
 import { Inngest } from "inngest";
 import { serve } from "inngest/next";
 import connectDB from "./db";
-import {  User } from "lucide-react";
+import User from "@/models/User";
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "NeoByte" });

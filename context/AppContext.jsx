@@ -1,8 +1,10 @@
 'use client'
 import { productsDummyData, userDummyData } from "@/assets/assets";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import axios from 'axios'
 
 export const AppContext = createContext();
 
@@ -14,7 +16,7 @@ export const AppContextProvider = (props) => {
 
     const currency = process.env.NEXT_PUBLIC_CURRENCY
     const router = useRouter()
-
+const { getToken } = useAuth();
     const {user} = useUser();
 
     const [products, setProducts] = useState([])
@@ -31,9 +33,20 @@ export const AppContextProvider = (props) => {
             if(user.publicMetadata.role === "seller"){
             setIsSeller(true)
         }
-        } catch (error) {
-            console.error("getting ERROR" , err)
+const token = await getToken();
+        const {data} = await axios.get('/api/user/data' , {headers: {Authorization:`Bearer ${token}`}})
+        if(data.success){
+            setUserData(data.user);
+            setCartItems(data.user.cartItems)
         }
+        else{
+            toast.error(data.message)
+        }
+        } catch (error) {
+            console.error("getting ERROR" , error)
+        }
+
+
         setUserData(userDummyData)
     }
 
@@ -95,7 +108,7 @@ export const AppContextProvider = (props) => {
     }, [user])
 
     const value = {
-        user,
+        user, getToken, 
         currency, router,
         isSeller, setIsSeller,
         userData, fetchUserData,

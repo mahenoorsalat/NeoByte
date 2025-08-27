@@ -25,7 +25,19 @@ const { getToken } = useAuth();
     const [cartItems, setCartItems] = useState({})
 
     const fetchProductData = async () => {
-        setProducts(productsDummyData)
+       
+        try{
+            const {data} = await axios.get('api/product/list')
+            if(data.success){
+                setProducts(data.products)
+            }
+            else{
+                toast.error(data.message)
+            }
+        }
+        catch(error){
+            toast.error(data.error)
+        }
     }
 
     const fetchUserData = async () => {
@@ -60,6 +72,7 @@ const token = await getToken();
             cartData[itemId] = 1;
         }
         setCartItems(cartData);
+        toast.success('Item added to cart')
 
     }
 

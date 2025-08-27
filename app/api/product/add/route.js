@@ -2,7 +2,7 @@ import connectDB from "@/config/db";
 import authSeller from "@/lib/authSeller";
 import Product from "@/models/Product";
 
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
 
@@ -14,9 +14,9 @@ cloudinary.config({
 
 export async function POST(request) {
     try {
-const auth = getAuth(request);
-console.log("getAuth result:", auth);
-const { userId } = auth;
+// const auth = getAuth(request);
+const { userId } = await auth();
+        console.log("Auth userId:", userId);
   if (!userId) {
             return NextResponse.json({ success: false, message: "Not authenticated" });
         }

@@ -73,7 +73,16 @@ const token = await getToken();
         }
         setCartItems(cartData);
         toast.success('Item added to cart')
-
+         if(user){
+            try{
+                const token = await getToken();
+                await axios.post('/api/cart/update' , {Authorization:`Bearer ${token}`});
+        toast.success('Item added to cart')
+            }
+            catch(error){
+               toast.error(error.message)
+            }
+         }
     }
 
     const updateCartQuantity = async (itemId, quantity) => {
@@ -85,7 +94,16 @@ const token = await getToken();
             cartData[itemId] = quantity;
         }
         setCartItems(cartData)
-
+ if(user){
+            try{
+                const token = await getToken();
+                await axios.post('/api/cart/update' , {Authorization:`Bearer ${token}`});
+        toast.success('Cart Updated')
+            }
+            catch(error){
+               toast.error(error.message)
+            }
+         }
     }
 
     const getCartCount = () => {

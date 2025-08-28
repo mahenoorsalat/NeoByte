@@ -36,7 +36,7 @@ const { getToken } = useAuth();
             }
         }
         catch(error){
-            toast.error(data.error)
+            toast.error(error.message)
         }
     }
 
@@ -59,7 +59,6 @@ const token = await getToken();
         }
 
 
-        setUserData(userDummyData)
     }
 
     const addToCart = async (itemId) => {
@@ -76,7 +75,11 @@ const token = await getToken();
          if(user){
             try{
                 const token = await getToken();
-                await axios.post('/api/cart/update' , {Authorization:`Bearer ${token}`});
+              await axios.post('/api/cart/update',
+  { cartData },
+  { headers: { Authorization: `Bearer ${token}` } }
+);
+
         toast.success('Item added to cart')
             }
             catch(error){

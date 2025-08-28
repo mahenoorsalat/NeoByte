@@ -28,7 +28,11 @@ const router = useRouter();
         e.preventDefault();
         try{
             const token = await getToken()
-            const { data } = await axios.post('/api/users/add-address' , {address} , {headers:{Authorization: `Bearer ${token}`}});
+const { data } = await axios.post(
+  '/api/users/add-address',
+  { address },
+  { headers:{ Authorization: `Bearer ${token}` } }
+);
          if(data.success){
             toast.success(data.message);
             router.push('/cart')

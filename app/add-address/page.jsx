@@ -29,7 +29,7 @@ const router = useRouter();
         try{
             const token = await getToken()
 const { data } = await axios.post(
-  '/api/users/add-address',
+  '/api/user/add-address',
   { address },
   { headers:{ Authorization: `Bearer ${token}` } }
 );

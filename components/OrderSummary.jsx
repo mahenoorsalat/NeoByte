@@ -16,26 +16,24 @@ const fetchUserAddresses = async () => {
   try {
     const token = await getToken();
 
-    const { data } = await axios.get(
-      '/api/user/get-address',
-      {}, // body
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
+    const { data } = await axios.get('/api/user/get-address', {
+      headers: { Authorization: `Bearer ${token}` },
+      withCredentials: true,
+    });
 
     if (data.success) {
-      setUserAddresses(data.address);
-      if (data.address.length > 0) {
-        setSelectedAddress(data.address[0]);
+      setUserAddresses(data.addresses);
+      if (data.addresses.length > 0) {
+        setSelectedAddress(data.addresses[0]);
       }
     } else {
       toast.error(data.message);
     }
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.response?.data?.message || error.message);
   }
 };
+
 
 
   const handleAddressSelect = (address) => {

@@ -13,17 +13,13 @@ const OrderSummary = () => {
     user,
     getCartItems,
     setCartItems,
+      cartItems,    
   } = useAppContext();
 
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userAddresses, setUserAddresses] = useState([]);
-  const [cartItems, setCartItemsState] = useState({});
 
-// OrderSummary.jsx
-useEffect(() => {
-  setCartItemsState(cartItems);
-}, [cartItems]);
 
 
   const fetchUserAddresses = async () => {
@@ -64,7 +60,7 @@ useEffect(() => {
         product: key,
         quantity: cartItems[key],
       }));
-
+ cartItemsArray = cartItemsArray.filter(item => item.quantity > 0)
       if (cartItemsArray.length === 0) {
         return toast.error("Cart is empty");
       }
@@ -85,7 +81,6 @@ useEffect(() => {
       if (data.success) {
         toast.success(data.message);
         setCartItems({}); // ✅ clears cart in context
-        setCartItemsState({}); // ✅ clears local state
         router.push("/order-placed");
       } else {
         toast.error(data.message);

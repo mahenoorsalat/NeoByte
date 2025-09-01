@@ -6,16 +6,19 @@ import { NextResponse } from "next/server";
 
 export async function POST(request){
     try{
-        const userId = getAuth(request);
+const { userId } = getAuth(request);
         const { address , items } = await request.json();
         if(!address || items.length===0){
             return NextResponse.json({success:false , message : "Invalid data"})
 
         }
-              const amount = await items.reduce(async (acc , item)=>{
-                const product = await Product.findById(item.product)
-                return await acc + product.offerPrice * item.quantity;
-              } , 0)
+let amount = 0;
+for (const item of items) {
+  const product = await Product.findById(item.product);
+  amount += product.offerPrice * item.quantity;
+}
+
+
    await inngest.send({
     name:'order/created',
     data:{

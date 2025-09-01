@@ -17,9 +17,10 @@ export async function GET(request) {
 
     await connectDB();
 
-    const orders = await Order.find({})
-      .populate("address")
-      .populate("items.product");
+    await connectDB();
+    Address.length
+
+    const orders = await Order.find({}).populate("address items.product")   // product details
 
     return NextResponse.json({ success: true, orders });
   } catch (error) {

@@ -24,21 +24,20 @@ const MyOrders = () => {
     });
 
     if (data.success) {
-      setOrders(data.orders.reverse()); // ✅ fixed field name
+      setOrders(data.orders.reverse());
+      setLoading(false) // ✅ fixed field name
     } else {
       toast.error(data.message);
     }
   } catch (error) {
-    toast.error(error.response?.data?.message || error.message);
-  } finally {
-    setLoading(false); // ✅ always runs
-  }
+    toast.error(error.message);
+  } 
 };
 
 
     useEffect(() => {
         fetchOrders();
-    }, []);
+    }, [user]);
 
     return (
         <>

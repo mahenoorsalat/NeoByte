@@ -13,11 +13,10 @@ export async function GET(request) {
     }
 
     await connectDB();
+  Address.length
 
-  
-    const orders = await Order.find({ userId })
-      .populate("items.product")   // product details
-      .populate("address");        // address details
+  Product.length
+    const orders = await Order.find({ userId }).populate("address items.product")   // product details
 
     return NextResponse.json({ success: true, orders });
   } catch (error) {

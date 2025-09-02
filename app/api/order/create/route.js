@@ -10,7 +10,7 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   try {
     const { userId } = getAuth(request);
-    const { address, items } = await request.json();
+    const { address, items } = await request.json(); // address = addressId
 
     if (!address || items.length === 0) {
       return NextResponse.json({ success: false, message: "Invalid data" });
@@ -18,37 +18,47 @@ export async function POST(request) {
 
     await connectDB();
 
-    // fetch full address from DB
+    // ✅ fetch full address from DB
     const addressDoc = await Address.findById(address);
     if (!addressDoc) {
       return NextResponse.json({ success: false, message: "Address not found" });
     }
 
-    // calculate amount
+    // ✅ calculate order amount
     let amount = 0;
     for (const item of items) {
       const product = await Product.findById(item.product);
+      if (!product) {
+        return NextResponse.json({ success: false, message: "Product not found" });
+      }
       amount += product.offerPrice * item.quantity;
     }
     const totalAmount = amount + Math.floor(amount * 0.02);
 
-    // create & save order
+    // ✅ create order with all required fields
     const newOrder = await Order.create({
       userId,
-      address: addressDoc, // ✅ full object, not just ID
+      address: {
+        fullName: addressDoc.fullName,
+        phoneNumber: addressDoc.phoneNumber,
+        pincode: addressDoc.pincode,
+        area: addressDoc.area,
+        city: addressDoc.city,
+        state: addressDoc.state,
+      },
       items,
       amount: totalAmount,
       date: Date.now(),
       status: "Pending",
     });
 
-    // optional: still send event
+    // optional event
     await inngest.send({
       name: "order/created",
       data: newOrder.toObject(),
     });
 
-    // clear user cart
+    // ✅ clear cart
     const user = await User.findById(userId);
     user.cartItems = [];
     await user.save();

@@ -2,8 +2,9 @@ import { inngest } from "@/config/inngest";
 import Product from "@/models/Product";
 import User from "@/models/User";
 import { getAuth } from "@clerk/nextjs/server";
+import connectDB from "@/config/db";
+import Order from "@/models/Order";
 import { NextResponse } from "next/server";
-
 
 export async function POST(request) {
   try {

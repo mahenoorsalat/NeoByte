@@ -56,11 +56,12 @@ const OrderSummary = () => {
       }
 
       // ✅ now safe because cartItems is defined
-      const cartItemsArray = Object.keys(cartItems).map((key) => ({
-        product: key,
-        quantity: cartItems[key],
-      }));
- cartItemsArray = cartItemsArray.filter(item => item.quantity > 0)
+let cartItemsArray = Object.keys(cartItems).map((key) => ({
+  product: key,
+  quantity: cartItems[key],
+}));
+cartItemsArray = cartItemsArray.filter(item => item.quantity > 0);
+
       if (cartItemsArray.length === 0) {
         return toast.error("Cart is empty");
       }

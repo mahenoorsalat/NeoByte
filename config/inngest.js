@@ -87,6 +87,7 @@ const orders = events.map(event => ({
   address: event.data.address,
   date: event.data.date,
 }));
+
  await connectDB();
 await Order.insertMany(orders);
 

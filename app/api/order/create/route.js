@@ -14,14 +14,14 @@ export async function POST(request) {
       return NextResponse.json({ success: false, message: "Invalid data" });
     }
 
-    // ✅ connect to MongoDB here
     await connectDB();
 
-    // now your DB queries will work fine
-    const amount = await items.reduce(async (acc, item) => {
+    let amount = 0;
+    for (const item of items) {
       const product = await Product.findById(item.product);
-      return await acc + product.offerPrice * item.quantity;
-    });
+      amount += product.offerPrice * item.quantity;
+    }
+    amount += Math.floor(amount * 0.02);
 
     await inngest.send({
       name: "order/created",
@@ -29,7 +29,7 @@ export async function POST(request) {
         userId,
         address,
         items,
-        amount: amount + Math.floor(amount * 0.02),
+        amount,
         date: Date.now(),
       },
     });
@@ -43,3 +43,4 @@ export async function POST(request) {
     return NextResponse.json({ success: false, message: error.message });
   }
 }
+

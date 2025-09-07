@@ -13,13 +13,13 @@ export async function GET(request) {
     }
 
     await connectDB();
-  Address.length
 
-  Product.length
-    const orders = await Order.find({ userId }).populate("address items.product")   // product details
+    const orders = await Order.find({ userId })
+      .populate("items.product");  // ✅ works now since product is ObjectId
 
     return NextResponse.json({ success: true, orders });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
+

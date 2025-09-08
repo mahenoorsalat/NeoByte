@@ -24,21 +24,21 @@ const { getToken } = useAuth();
     const [isSeller, setIsSeller] = useState(false)
     const [cartItems, setCartItems] = useState({})
 
-    const fetchProductData = async () => {
-       
-        try{
-            const {data} = await axios.get('api/product/list')
-            if(data.success){
-                setProducts(data.products)
-            }
-            else{
-                toast.error(data.message)
-            }
+  const fetchProductData = async () => {
+    try {
+        const { data } = await axios.get('/api/product/list');
+        console.log('Fetched products:', data);
+        if(data.success){
+            setProducts(data.products)
+        } else {
+            toast.error(data.message)
         }
-        catch(error){
-            toast.error(error.message)
-        }
+    } catch(error) {
+        console.error(error);
+        toast.error(error.message)
     }
+}
+
 
     const fetchUserData = async () => {
         try {

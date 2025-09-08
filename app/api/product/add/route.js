@@ -15,7 +15,7 @@ cloudinary.config({
 export async function POST(request) {
     try {
 // const auth = getAuth(request);
-const { userId } = await auth();
+const { userId } = getAuth(request);
         console.log("Auth userId:", userId);
   if (!userId) {
             return NextResponse.json({ success: false, message: "Not authenticated" });

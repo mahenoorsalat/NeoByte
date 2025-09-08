@@ -1,22 +1,21 @@
 'use client'
-import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAppContext } from "@/context/AppContext";
 
 const AllProducts = () => {
-    const { products, fetchProductData } = useAppContext();
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const loadProducts = async () => {
-            await fetchProductData(); // fetch products again to make sure context is updated
-            setLoading(false);
-        }
-        loadProducts();
-    }, []);
+const { products, fetchProductData } = useAppContext();
+const [loading, setLoading] = useState(true);
 
+useEffect(() => {
+    const loadProducts = async () => {
+        await fetchProductData(); // fetch products if not already
+        setLoading(false);
+    }
+    loadProducts();
+}, [fetchProductData]);
     return (
         <>
             <Navbar />
@@ -26,15 +25,7 @@ const AllProducts = () => {
                     <div className="w-16 h-0.5 bg-orange-600 rounded-full"></div>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 flex-col items-center gap-6 mt-12 pb-14 w-full">
-                    {loading ? (
-                        <p>Loading products...</p>
-                    ) : products.length === 0 ? (
-                        <p>No products found</p>
-                    ) : (
-                        products.map((product, index) => (
-                            <ProductCard key={index} product={product} />
-                        ))
-                    )}
+                    {products.map((product, index) => <ProductCard key={index} product={product} />)}
                 </div>
             </div>
             <Footer />

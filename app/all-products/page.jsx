@@ -1,5 +1,4 @@
 'use client'
-import { useState, useEffect } from "react";
 import ProductCard from "@/components/ProductCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,16 +6,8 @@ import { useAppContext } from "@/context/AppContext";
 
 const AllProducts = () => {
 
-const { products, fetchProductData } = useAppContext();
-const [loading, setLoading] = useState(true);
+    const { products } = useAppContext();
 
-useEffect(() => {
-    const loadProducts = async () => {
-        await fetchProductData(); // fetch products if not already
-        setLoading(false);
-    }
-    loadProducts();
-}, [fetchProductData]);
     return (
         <>
             <Navbar />

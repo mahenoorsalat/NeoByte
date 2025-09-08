@@ -1,28 +1,20 @@
+// /api/product/seller-list/route.js
 import connectDB from "@/config/db";
-import Order from "@/models/Order";
-import { getAuth } from "@clerk/nextjs/server";
+import Product from "@/models/Product";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import authSeller from "@/lib/authSeller";
 
-export async function GET(request) {
+export async function GET() {
   try {
-    const { userId } = getAuth(request);
-
-    const isSeller = await authSeller(userId);
-    if (!isSeller) {
-      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 403 });
+    await connectDB();
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ success: false, message: "Not authenticated" });
     }
 
-    await connectDB();
-
-    const orders = await Order.find({})
-      .populate("items.product"); // ✅ only populate product
-
-    return NextResponse.json({ success: true, orders });
+    const products = await Product.find({ userId });
+    return NextResponse.json({ success: true, products });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, message: error.message });
   }
 }

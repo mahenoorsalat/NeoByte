@@ -61,15 +61,20 @@ const Orders = () => {
                                 </p>
                             </div>
                             <div>
-                                <p>
-<span className="font-medium">{order.address?.fullName ?? "No name"}</span>
-                                    <br />
-                                    <span >{order.address.area}</span>
-                                    <br />
-                                    <span>{`${order.address.city}, ${order.address.state}`}</span>
-                                    <br />
-                                    <span>{order.address.phoneNumber}</span>
-                                </p>
+                              <p>
+  <span className="font-medium">{order.address?.fullName ?? "No name"}</span>
+  <br />
+  <span>{order.address?.area ?? "N/A"}</span>
+  <br />
+  <span>
+    {order.address
+      ? `${order.address.city}, ${order.address.state}`
+      : "N/A"}
+  </span>
+  <br />
+  <span>{order.address?.phoneNumber ?? "N/A"}</span>
+</p>
+
                             </div>
                             <p className="font-medium my-auto">{currency}{order.amount}</p>
                             <div>

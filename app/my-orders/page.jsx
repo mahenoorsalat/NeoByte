@@ -11,28 +11,28 @@ import toast from "react-hot-toast";
 
 const MyOrders = () => {
 
-    const { currency , getToken  , user } = useAppContext();
+    const { currency, getToken, user } = useAppContext();
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
- const fetchOrders = async () => {
-  try {
-    const token = await getToken();
-    const { data } = await axios.get("/api/order/list", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const fetchOrders = async () => {
+        try {
+            const token = await getToken();
+            const { data } = await axios.get("/api/order/list", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
 
-    if (data.success) {
-      setOrders(data.orders.reverse());
-      setLoading(false) // ✅ fixed field name
-    } else {
-      toast.error(data.message);
-    }
-  } catch (error) {
-    toast.error(error.message);
-  } 
-};
+            if (data.success) {
+                setOrders(data.orders.reverse());
+                setLoading(false) // ✅ fixed field name
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
 
 
     useEffect(() => {
@@ -62,15 +62,17 @@ const MyOrders = () => {
                                     </p>
                                 </div>
                                 <div>
-                               <p>
-  <span className="font-medium">{order.address.fullName}</span>
-  <br />
-  <span>{order.address.area}</span>
-  <br />
-  <span>{`${order.address.city}, ${order.address.state}`}</span>
-  <br />
-  <span>{order.address.phoneNumber}</span>
-</p>
+                                    <p>
+                                        <span className="font-medium">{order?.address?.fullName || "N/A"}</span>
+                                        <br />
+                                        <span>{order?.address?.area || "N/A"}</span>
+                                        <br />
+                                        <span>
+                                            {order?.address ? `${order.address.city}, ${order.address.state}` : "N/A"}
+                                        </span>
+                                        <br />
+                                        <span>{order?.address?.phoneNumber || "N/A"}</span>
+                                    </p>
 
                                 </div>
                                 <p className="font-medium my-auto">{currency}{order.amount}</p>

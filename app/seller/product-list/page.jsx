@@ -18,10 +18,9 @@ const ProductList = () => {
     try {
       const { token } = await getToken();
 
-     const { data } = await axios.get("/api/product/list", {
-  headers: { Authorization: `Bearer ${token}` },
-});
-
+      const { data } = await axios.get("/api/product/seller-list", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (data.success) {
         setProducts(Array.isArray(data.products) ? data.products : []); // ✅ always an array

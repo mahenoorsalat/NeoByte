@@ -5,6 +5,9 @@ import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import Footer from "@/components/seller/Footer";
 import Loading from "@/components/Loading";
+import axios from "axios";
+import toast from "react-hot-toast";
+
 
 const Orders = () => {
 
@@ -59,7 +62,7 @@ const Orders = () => {
                             </div>
                             <div>
                                 <p>
-                                    <span className="font-medium">{order.address.fullName}</span>
+<span className="font-medium">{order.address?.fullName ?? "No name"}</span>
                                     <br />
                                     <span >{order.address.area}</span>
                                     <br />
